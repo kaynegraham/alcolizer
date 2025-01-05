@@ -1,0 +1,87 @@
+.image-container {
+    width: min(315px, 100%);
+    aspect-ratio: 315/530;
+    position: absolute;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+  }
+  .image-container img {
+    width: 100%;
+  }
+  .image-container .screen {
+    width: 33%;
+    aspect-ratio: 4/5;
+    background: #000;
+    position: absolute;
+    inset: 11% 0 auto 3%;
+    margin-inline: auto;
+    display: none;
+    color: white;
+    overflow: hidden;
+    text-align: center;
+  }
+  .image-container.off .screen {
+    display: block;
+  }
+  .image-container .button {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+#power-button {
+  position: absolute;
+  top: 42%;  
+  left: 45%;  
+  padding: 10px 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#reset-button {
+  position: absolute;
+  top: 52%;  
+  right: 36%; 
+  padding: 5px 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#alcolize-button {
+  position: absolute;
+  top: 52%; 
+  left: 40%;
+  padding: 5px 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#bactext {
+  position: absolute;
+  top: 10%;
+  left: 38%;
+  color: black;
+  text-decoration: solid;
+  font-weight: bolder;
+}
+
+#bacunit {
+  position: absolute;
+  top: 17%;
+  left: 38%;
+  color: black;
+  text-decoration: solid;
+  font-size: 15px;
+  font-weight: bold;
+}
