@@ -1,5 +1,5 @@
 # Alcolizer LE5 Script
-[![Alcolizer LE5 FiveM Script](https://img.youtube.com/vi/NbTJNgIW21g/0.jpg)](https://www.youtube.com/watch?v=NbTJNgIW21g)
+![Alcolizer LE5 FiveM Script](https://www.surveygear.com.au/wp-content/uploads/AlcolizerLE5-lp-img.png)
 
 This is a script I made trying to replicate the Alcolizer LE5 which is what most australian police departments use, There's definitely some things to improve on but this will come with time.
 
