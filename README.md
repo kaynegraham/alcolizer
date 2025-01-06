@@ -16,3 +16,6 @@ Enjoy :)
 
 # Support
 If you require any support, add me on discord devkayne and i'll give ya a hand
+
+# Thanks
+Thank you to Howard03 and SynsterFence7x for the model and texture
