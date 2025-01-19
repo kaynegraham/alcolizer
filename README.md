@@ -1,7 +1,8 @@
 # Alcolizer LE5 Script
-![Alcolizer LE5 FiveM Script](https://www.surveygear.com.au/wp-content/uploads/AlcolizerLE5-lp-img.png)
+![alcolizer](https://github.com/user-attachments/assets/356623cd-4592-4f2f-9e6b-aa160a9f8ac1)
 
-This is a script I made trying to replicate the Alcolizer LE5 which is what most australian police departments use, There's definitely some things to improve on but this will come with time.
+
+This is an Alcolizer script, I tried to replicate the one's australian police use as best as possible.
 
 # Features
 - Realistic and interactive user interface
