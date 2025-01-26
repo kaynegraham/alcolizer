@@ -12,6 +12,11 @@ RegisterCommand("aboutalcolizer", function()
 end)
 
 -- Events -- 
+RegisterNetEvent('alcolizer:alert')
+AddEventHandler('alcolizer:alert', function (message, type) 
+    showAlert(message, type)
+end)
+
 RegisterNetEvent('alcolizer:shownui')
 AddEventHandler('alcolizer:shownui', function()
     if not nuiOpen then 
@@ -29,8 +34,9 @@ AddEventHandler('alcolizer:shownui', function()
     end 
 end)
 
-RegisterNetEvent('alcolizer:askforresult')
-AddEventHandler('alcolizer:askforresult', function()
+RegisterNetEvent('alcolizer:enterbac')
+AddEventHandler('alcolizer:enterbac', function(officerId)
+    local open = true 
     AddTextEntry("askforresult", "Enter your Blood Alcohol Content (Legal Limit is " .. Config.legalLimit .. ")")
     DisplayOnscreenKeyboard(1, "askforresult", "", "", "", "", "", 10)
     while (UpdateOnscreenKeyboard() == 0) do
@@ -38,18 +44,32 @@ AddEventHandler('alcolizer:askforresult', function()
         Wait(0)
     end
 
-    if (GetOnscreenKeyboardResult()) then 
-        Result = GetOnscreenKeyboardResult()
-        TriggerServerEvent('alcolizer:senddatatoserver', Result)
+    local Result = GetOnscreenKeyboardResult()
+    
+    if Result and Result ~= "" then
+        TriggerServerEvent('alcolizer:submitbac', officerId, Result)
+    else
+        showAlert("You entered an invalid BAC reading. Please enter a valid number.", "error")
+
+        TriggerServerEvent('alcolizer:invalidbac', officerId)
+        DisplayOnscreenKeyboard(1, "askforresult", "", "", "", "", "", 10)
     end
 end)
 
-RegisterNetEvent('alcolizer:fetchresult')
-AddEventHandler('alcolizer:fetchresult', function(result)
-    BacResult = result
+RegisterNetEvent('alcolizer:recievebac')
+AddEventHandler('alcolizer:recievebac', function(result)
+    SendNUIMessage({
+        type = "showbac",
+        bac = result
+    })
 end)
 
--- NUI Callbacks --
+RegisterNetEvent('alcolizer:showInvalid')
+AddEventHandler('alcolizer:showInvalid', function()
+    showAlert("Suspect entered an invalid BAC Reading.", "error")
+end)
+
+
 RegisterNuiCallback('resetalcolizer', function(data, cb)
     TriggerEvent('alcolizer:shownui')
     cb({})
@@ -60,7 +80,7 @@ RegisterNuiCallback('alcolizeped', function(data, cb)
 
     if closestPlayer == nil then 
         TriggerEvent('alcolizer:shownui')
-        showAlert("There is no player nearby to alcolize.")
+        showAlert("There is no player nearby to alcolize.", "error")
         return 
     end 
 
@@ -68,23 +88,13 @@ RegisterNuiCallback('alcolizeped', function(data, cb)
     local officerId = GetPlayerServerId(PlayerId())
 
     -- Get Result
-    TriggerServerEvent('alcolizer:getresult', closestPlayerId, officerId)
+    TriggerServerEvent('alcolizer:requestbac', closestPlayerId, officerId)
 
     -- Configurable duration for animation and prop
     BreathalyzerAnim()
 
-    -- Extra configurable duration to ensure suspect has time to enter result
-    Wait(Config.waitDuration)
-
-    -- If no result is given alert officer and don't callback
-    if BacResult == nil then 
-        TriggerEvent('alcolizer:shownui')
-        showAlert("Player did not give a result.")
-        return
-    end 
-
-    -- If result is not nil then callback
-    cb(BacResult)
+    -- Callback 
+    cb({})
 end)
 
 -- Functions -- 
@@ -140,8 +150,10 @@ function BreathalyzerAnim()
     RemoveAnimDict(dict)
 end
 
-function showAlert(message)
-    AddTextEntry("alcolizer:alert", message)
-    BeginTextCommandDisplayHelp("alcolizer:alert") 
-    EndTextCommandDisplayHelp(0, false, true, 5000)
+function showAlert(message, type)
+    SendNUIMessage({
+        type = "notification",
+        text = message,
+        notifType = type or "info"
+    })
 end

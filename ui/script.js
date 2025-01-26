@@ -1,5 +1,4 @@
 $(document).ready(function() {
-  // Initially hide the image container and add the 'off' class
   $('.image-container').hide();
   $('#reset-button').prop("disabled", true)
   $('#alcolize-button').prop("disabled", true)
@@ -8,12 +7,24 @@ $(document).ready(function() {
   window.addEventListener('message', function(event) {
     const data = event.data;
 
+    // Notification System
+    if (event.data.type === "notification") {
+      let notif = document.createElement("div");
+      notif.className = "notif " + event.data.notifType;
+      notif.innerText = event.data.text;
+      document.body.appendChild(notif);
+
+      setTimeout(() => notif.remove(), 4000);
+  }
+
     // If Esc clicked close NUI
     $(document).on('keyup', function(e) {
       let keyPressed = e.which;
       if (keyPressed === 27) {
         axios.post(`https://${GetParentResourceName()}/resetalcolizer`, {})
+        $('.image-container').hide();
         $('.image-container').toggleClass('off'); 
+        $('#bactext').text(".000")
       }
     })
 
@@ -25,6 +36,13 @@ $(document).ready(function() {
     // Hide the UI when closenui is heard
     if (data.type === "closenui") {
       $('.image-container').hide();
+    }
+
+    // Update BAC 
+    if (data.type === "showbac") {
+      if (data.bac != "Invalid") {
+        $('#bactext').text(data.bac); 
+      }
     }
 
     // Button handling
@@ -47,12 +65,6 @@ $(document).ready(function() {
 
     $("#alcolize-button").click(function() {
       axios.post(`https://${GetParentResourceName()}/alcolizeped`, {})
-      .then((response) => {
-        let bacResult = response.data;
-         
-        // change h1 text
-        $('#bactext').text(bacResult)
-      })
     });
   });
 });
